@@ -1,0 +1,33 @@
+# Secrets (GR-12): only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# Node / pnpm
+node_modules/
+*.tsbuildinfo
+coverage/
+dist/
+.expo/
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Model weights and data never go in Git (05 §3.1, §4.5 EMBEDDING_MODEL_PATH)
+.models/
+
+# Terraform state (the provider lock file is committed)
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# OS / editors
+.DS_Store
+.idea/

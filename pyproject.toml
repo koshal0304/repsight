@@ -1,0 +1,8 @@
+# uv workspace root (05 §3.1): virtual, one uv.lock for every Python project.
+# Interpreter pinned in .python-version (canon §10.2); uv pinned here (ADR-033).
+
+[tool.uv]
+required-version = "==0.12.24"
+
+[tool.uv.workspace]
+members = ["services/*", "tools/*"]

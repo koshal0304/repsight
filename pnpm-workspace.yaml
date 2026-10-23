@@ -1,0 +1,7 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Pins are exact and enforced (GR-17, NFR-038; versions in ADR-033).
+engineStrict: true
+savePrefix: ''

@@ -1,0 +1,26 @@
+{
+  "name": "repsight",
+  "private": true,
+  "packageManager": "pnpm@12.10.1+sha512.ba40a37eb1a370d60fea8c4cf1d364c13bcccef518e98ad2bcee954f539d38da37458e58261a3fa55e06523450ea0ffff9f497b135be41f2c15c1642bacace6c",
+  "engines": {
+    "node": "22.13.x"
+  },
+  "scripts": {
+    "services:up": "docker compose up -d",
+    "db:migrate": "uv run --package repsight-api alembic upgrade head",
+    "db:seed": "uv run --package repsight-api python -m seeds",
+    "api:dev": "uv run --package repsight-api uvicorn app.main:app --reload --port 8000",
+    "worker:dev": "uv run --package repsight-worker celery -A worker worker --beat",
+    "admin:dev": "uv run --package repsight-admin uvicorn admin.main:app --reload --port 8100",
+    "gen:api": "pnpm --filter @repsight/api-client run generate",
+    "mobile:prebuild": "pnpm --filter @repsight/mobile exec expo prebuild --clean",
+    "mobile:ios": "pnpm --filter @repsight/mobile exec expo run:ios",
+    "mobile:android": "pnpm --filter @repsight/mobile exec expo run:android",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test && uv run pytest tools/ci",
+    "harness": "pnpm --filter @repsight/exercise-engine run harness",
+    "eval:safety": "uv run ml/evals/run.py",
+    "check:all": "uv lock --check && pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm test"
+  }
+}
