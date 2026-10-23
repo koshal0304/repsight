@@ -22,9 +22,9 @@ E0-T03 adds the first Python services. 05 §5.2 names the tools (`ruff check` an
 | `mypy` | **2.4.0** | 2026-10-01 | `strict = true` on `services/api/app` and `tools/` (05 §5.2) |
 | `pytest` | 9.1.1 | 2026-06-19 | In use since E0-T01; moved from `tools/ci` to the root group so it is written once |
 | `httpx2` | **2.13.1** | 2026-09-23 | HTTP client behind FastAPI's `TestClient`. Starlette 1.9.0 deprecates `httpx` there and imports `httpx2` first |
-| `uv_build` | 0.12.24 | 2026-10-08 | Build backend for `repsight-api` and `repsight-worker`, so `app` and `worker` import from the repo root (`pnpm api:dev`, `pnpm worker:dev`, pytest). It ships with uv, so it matches the uv pin in ADR-033 |
+| `uv_build` | 0.12.24 | 2026-10-08 | Build backend for `repsight-api`, so `app` imports from the repo root in every entry point (`pnpm api:dev`, the worker, pytest, and later Alembic and seeds). It ships with uv, so it matches the uv pin in ADR-033 |
 
-The four dev tools sit in one `[dependency-groups] dev` list in the root `pyproject.toml`; tool settings sit in the same file. `uv_build` is pinned in each service's `[build-system]`.
+The four dev tools sit in one `[dependency-groups] dev` list in the root `pyproject.toml`; tool settings sit in the same file. `uv_build` is pinned in the `[build-system]` of `services/api`. `services/worker` is a script directory (`package = false`, like `tools/ci`): `pnpm worker:dev` and pytest put it on `PYTHONPATH`, so the file stays `services/worker/worker.py` as 05 §6.3 names it.
 
 **Licences.** The lockfile holds 46 third-party packages. 31 of them are the runtime closure of `repsight-api` and `repsight-worker` (`uv tree --no-dev`); the rest are dev-only.
 
@@ -48,8 +48,8 @@ There is no AGPL, SSPL, RSAL or non-commercial licence. **Two licences are not o
 ## Alternatives
 
 1. **`httpx` 0.28.1.** It works, but Starlette 1.9.0 prints a deprecation warning for it and points to `httpx2`. Rejected so the test client does not start on a deprecated path. `httpx` also pulls in `certifi` (MPL-2.0), and `httpx2` uses `truststore` (MIT) instead.
-2. **Hatchling or setuptools as the build backend.** Either one can package `worker` as a single file, `services/worker/worker.py` (the name in 05 §6.3). Rejected because each adds a build tool and its own dependencies. `uv_build` only builds packages, so the worker module is `services/worker/worker/__init__.py`. `celery -A worker` works the same way.
-3. **Virtual projects (`package = false`) with path settings.** Rejected because `celery --workdir` changes the working directory before the app is imported, so `.env` at the repo root would not load.
+2. **Hatchling or setuptools as the build backend.** Rejected because each adds a build tool with its own dependencies, while `uv_build` ships with the pinned uv.
+3. **Packaging the worker as well.** `uv_build` packages only directories, so the file would move to `services/worker/worker/__init__.py`. That is a path deviation from 05 §6.3 (05 §10.5). `celery --workdir services/worker` was rejected too: it changes the working directory before the app is imported, so `.env` at the repo root would not load.
 4. **Dev tools declared in each member.** Rejected for the reason ADR-034 gives: one root list is the least to keep in step.
 5. **The newest releases** (`ruff` 0.17.2, `httpx2` 2.16.0). Rejected because each was less than 14 days old at pin time.
 
@@ -69,7 +69,7 @@ Run on 2026-10-23, macOS arm64, Node 22.13.1, pnpm 12.10.1, uv 0.12.24, CPython 
 - Release dates and dependency ranges came from `https://pypi.org/pypi/<package>/<version>/json`.
 - `pnpm check:all` passed: ESLint and Prettier on 3 packages, ruff on 8 Python files, `tsc` on 2 packages, mypy on 5 files, 2 Jest tests and 9 pytest tests.
 - `uvicorn app.main:app` answered `200 {"status":"ok"}` on `/healthz` and `/readyz`.
-- `celery -A worker report` found the app, then stopped at kombu's Redis transport because redis-py is not installed (see Consequences).
+- `pnpm worker:dev` found the app, then stopped at kombu's Redis transport because redis-py is not installed (see Consequences). Without the `PYTHONPATH` entry, Celery reports "The module worker was not found".
 - Each deliberate violation failed:
   - `assert` in `app/` (ruff `S101`)
   - an unformatted file (`ruff format --check`)

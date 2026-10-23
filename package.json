@@ -10,7 +10,7 @@
     "db:migrate": "uv run --package repsight-api alembic upgrade head",
     "db:seed": "uv run --package repsight-api python -m seeds",
     "api:dev": "uv run --package repsight-api uvicorn app.main:app --reload --port 8000",
-    "worker:dev": "uv run --package repsight-worker celery -A worker worker --beat",
+    "worker:dev": "PYTHONPATH=services/worker uv run --package repsight-worker celery -A worker worker --beat",
     "admin:dev": "uv run --package repsight-admin uvicorn admin.main:app --reload --port 8100",
     "gen:api": "pnpm --filter @repsight/api-client run generate",
     "mobile:prebuild": "pnpm --filter @repsight/mobile exec expo prebuild --clean",

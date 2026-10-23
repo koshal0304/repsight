@@ -32,4 +32,5 @@ files = ["services/api/app", "tools"]
 
 [tool.pytest.ini_options]
 testpaths = ["tools/ci", "services"]
+pythonpath = ["services/worker"]
 addopts = ["--import-mode=importlib"]

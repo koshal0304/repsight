@@ -579,7 +579,7 @@ source = { virtual = "tools/ci" }
 [[package]]
 name = "repsight-worker"
 version = "0.0.0"
-source = { editable = "services/worker" }
+source = { virtual = "services/worker" }
 dependencies = [
     { name = "celery" },
     { name = "repsight-api" },
