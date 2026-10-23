@@ -5,3 +5,9 @@ packages:
 # Pins are exact and enforced (GR-17, NFR-038; versions in ADR-033).
 engineStrict: true
 savePrefix: ''
+
+# Dependency build scripts run only when reviewed here (ADR-034). These two ship prebuilt
+# native bindings as optional dependencies; their scripts only rebuild or re-download them.
+allowBuilds:
+  '@parcel/watcher': false
+  unrs-resolver: false
