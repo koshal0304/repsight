@@ -12,24 +12,24 @@
 
 | Item | Question | Asked | Task | Who signs |
 |---|---|---|---|---|
-| WAITING FOR HUMAN: HITL-12 | Create the GitHub repository (planned: private `koshal0304/repsight`; no organisation exists yet) and push `main` and the E0-T01 branch, so E0 work can go through PRs and `ci.yml` (E0-T06) can run? Claude Code's attempt was blocked by the session's permission rules, so a human runs it | 2026-10-23 | E0-T01 | CEO / tech lead |
+| — | — | — | — | — |
 
 ## Current task
 
 | Field | Value |
 |---|---|
 | Task | E0-T01 — Workspace skeleton |
-| Branch / PR | `e0/e0-t01-workspace-skeleton` / no PR yet (no remote, HITL-12) |
+| Branch / PR | `e0/e0-t01-workspace-skeleton` / [#1](https://github.com/koshal0304/repsight/pull/1) |
 | Status | IN REVIEW |
 | Last commit | `ee8e5ea` chore(E0-T01): workspace skeleton with pinned toolchain (plus the PROGRESS-only commit after it) |
-| Next step | A human creates the GitHub repo and pushes (HITL-12), then opens the E0-T01 PR. Then start E0-T02 (shared TS and lint config; one Jest test each in `packages/exercise-engine` and `packages/contracts`) |
+| Next step | Tech lead reviews and merges #1. Meanwhile, E0-T02 can start from this branch (shared TS and lint config; one Jest test each in `packages/exercise-engine` and `packages/contracts`) |
 | Resume prompt | "Continue E0: next open task in docs/PROGRESS.md." |
 
 ## Epic status
 
 | Epic | Name | Weeks | Gate | Status | Tasks done | Current / next task | Blocker or HITL | PRs |
 |---|---|---|---|---|---|---|---|---|
-| E0 | Repo bootstrap and CI | W1 | M1 | IN PROGRESS | 0/9 | E0-T01 (in review) → E0-T02 | HITL-12 | — |
+| E0 | Repo bootstrap and CI | W1 | M1 | IN PROGRESS | 0/9 | E0-T01 (in review) → E0-T02 | — | #1 |
 | E1 | Backend foundation | W1–W10 | M2 | NOT STARTED | 0/11 | E1-T01 | — | — |
 | E2 | Mobile foundation | W2–W10 | M2 | NOT STARTED | 0/10 | E2-T01 | — | — |
 | E3 | PoseEngine and camera pipeline | W1–W12 | M1, M2 | NOT STARTED | 0/12 | E3-T01 | — | — |
@@ -50,12 +50,12 @@
 
 | Task | Status | PR | Requirement IDs proven | Tests added | Notes |
 |---|---|---|---|---|---|
-| E0-T01 | IN REVIEW | — (no remote) | NFR-038 (partial: toolchain pins exact, lockfiles committed; the full pin checker comes with the E0 linters) | `tools/ci/tests/test_workspace.py`: `test_nfr_038_toolchain_pins_are_exact`, `test_env_example_defines_every_playbook_variable`, `test_root_scripts_cover_playbook_bootstrap_commands`, `test_gr_12_env_file_is_git_ignored` | ADR-033 Accepted 2026-10-23 (HITL-09). Script bodies for code that does not exist yet (`db:seed`, `worker:dev`, `admin:dev`, `gen:api`, `harness`) follow the 05 §3.1 layout; the task that builds each one confirms or adjusts it |
+| E0-T01 | IN REVIEW | [#1](https://github.com/koshal0304/repsight/pull/1) | NFR-038 (partial: toolchain pins exact, lockfiles committed; the full pin checker comes with the E0 linters) | `tools/ci/tests/test_workspace.py`: `test_nfr_038_toolchain_pins_are_exact`, `test_env_example_defines_every_playbook_variable`, `test_root_scripts_cover_playbook_bootstrap_commands`, `test_gr_12_env_file_is_git_ignored` | ADR-033 Accepted 2026-10-23 (HITL-09). Script bodies for code that does not exist yet (`db:seed`, `worker:dev`, `admin:dev`, `gen:api`, `harness`) follow the 05 §3.1 layout; the task that builds each one confirms or adjusts it |
 | E0-T02 | NOT STARTED | — | — | — | Jest smoke tests land here |
 | E0-T03 | NOT STARTED | — | — | — | API pytest smoke test (`/healthz`) lands here; extend root `lint`/`typecheck`/`test` with ruff, mypy and `services/api` |
 | E0-T04 | NOT STARTED | — | — | — | Add the Docker image tags to ADR-033 |
 | E0-T05 | NOT STARTED | — | NFR-032, NFR-024, BR-23 | — | Linters go into the existing `tools/ci` project |
-| E0-T06 | NOT STARTED | — | — | — | Needs a remote (HITL-12) to run |
+| E0-T06 | NOT STARTED | — | — | — | Runs on `koshal0304/repsight` (private, personal account; HITL-12 answered 2026-10-23) |
 | E0-T07 | NOT STARTED | — | — | — | ADR-033 already drafted in E0-T01; T07 adds the template, ADR-001 and ADR-002 |
 | E0-T08 | NOT STARTED | — | — | — | This file exists already; T08 adds `docs/DECISIONS.md` (DEC-001..DEC-012) and checks this file against 05 §10.2 |
 | E0-T09 | NOT STARTED | — | — | — | — |
@@ -87,5 +87,6 @@
 
 | Date | Task | What was done | Gates run | Next step |
 |---|---|---|---|---|
+| 2026-10-23 | E0-T01 | HITL-12 answered: a human created the private repo `koshal0304/repsight` and pushed `main` and the task branch. Claude Code opened PR #1 | — | Review and merge #1; E0-T02 |
 | 2026-10-23 | E0-T01 | ADR-033 accepted (HITL-09). Developer machine set up with uv 0.12.24 and corepack on Node 22.13.1. Repo creation and push blocked by the session's permission rules (HITL-12 still open) | `pnpm check:all` in a fresh interactive shell (4 passed) | Human creates the repo and pushes; then E0-T02 |
 | 2026-10-23 | E0-T01 | pnpm and uv workspaces, root scripts (05 §4.4), `.editorconfig`, `.gitignore`, `.env.example` (all 65 §4.5 variables), pins (pnpm 12.10.1, uv 0.12.24, Node 22.13.1, Python 3.14.8), lockfiles, ADR-033 draft, workspace tests | `pnpm check:all` on a clean clone of `ee8e5ea` (4 passed) | Tech lead review and HITL-09; then E0-T02 |
