@@ -1,0 +1,18 @@
+[project]
+name = "repsight-worker"
+version = "0.0.0"
+description = "Celery worker and beat entry points; imports `app` (05 §3.1)"
+requires-python = ">=3.14.8,<3.15"
+# Canon §10.2 pin; changing it needs an ADR (GR-17).
+dependencies = ["celery==5.6.3", "repsight-api"]
+
+[tool.uv.sources]
+repsight-api = { workspace = true }
+
+[build-system]
+requires = ["uv_build==0.12.24"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "worker"
+module-root = ""
