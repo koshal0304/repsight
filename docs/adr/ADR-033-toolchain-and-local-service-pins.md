@@ -2,10 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-10-23 |
 | Drafted by | Claude Code (E0-T01) |
 | Decides | Tech lead (HITL-09) |
+| Accepted | 2026-10-23 by Koshal Kumar in the E0-T01 session (HITL-09), as written: Node stays on 22.13.1, with the risk below noted |
 | Scope | pnpm and uv pins (E0-T01). Docker image tags for local services are added by E0-T04 |
 
 ## Context
