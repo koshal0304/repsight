@@ -22,7 +22,7 @@
 | Task | E0-T01 — Workspace skeleton |
 | Branch / PR | `e0/e0-t01-workspace-skeleton` / no PR yet (no remote, HITL-12) |
 | Status | IN REVIEW |
-| Last commit | see `git log -1` on the branch: `chore(E0-T01): workspace skeleton with pinned toolchain` |
+| Last commit | `ee8e5ea` chore(E0-T01): workspace skeleton with pinned toolchain (plus the PROGRESS-only commit after it) |
 | Next step | Tech lead reviews the branch and accepts ADR-033. Then start E0-T02 (shared TS and lint config; one Jest test each in `packages/exercise-engine` and `packages/contracts`) |
 | Resume prompt | "Continue E0: next open task in docs/PROGRESS.md." |
 
@@ -71,7 +71,7 @@
 
 | Gate | Command or CI job | Result | Run ID / evidence | Commit | Date |
 |---|---|---|---|---|---|
-| Local checks | `pnpm check:all` | not run on a commit yet | — | — | — |
+| Local checks | `pnpm install --frozen-lockfile && uv sync --frozen && pnpm check:all` on a clean clone | PASS (4 tests) | Local run, macOS arm64, Node 22.13.1, pnpm 12.10.1, uv 0.12.24, CPython 3.14.8; Linux not run yet (needs CI, E0-T06) | `ee8e5ea` | 2026-10-23 |
 | CI on `main` | `ci.yml` | not run yet (E0-T06) | — | — | — |
 | Golden harness | `pnpm harness` / `harness.yml` | n/a until E4-T05 | — | — | — |
 | Safety eval | `pnpm eval:safety -- --mode mock` / `safety-eval.yml` | n/a until E7-T11 | — | — | — |
@@ -88,4 +88,4 @@
 
 | Date | Task | What was done | Gates run | Next step |
 |---|---|---|---|---|
-| 2026-10-23 | E0-T01 | pnpm and uv workspaces, root scripts (05 §4.4), `.editorconfig`, `.gitignore`, `.env.example` (all 65 §4.5 variables), pins (pnpm 12.10.1, uv 0.12.24, Node 22.13.1, Python 3.14.8), lockfiles, ADR-033 draft, workspace tests | `pnpm check:all` (4 passed) | Tech lead review and HITL-09; then E0-T02 |
+| 2026-10-23 | E0-T01 | pnpm and uv workspaces, root scripts (05 §4.4), `.editorconfig`, `.gitignore`, `.env.example` (all 65 §4.5 variables), pins (pnpm 12.10.1, uv 0.12.24, Node 22.13.1, Python 3.14.8), lockfiles, ADR-033 draft, workspace tests | `pnpm check:all` on a clean clone of `ee8e5ea` (4 passed) | Tech lead review and HITL-09; then E0-T02 |
