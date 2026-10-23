@@ -22,5 +22,16 @@
     "harness": "pnpm --filter @repsight/exercise-engine run harness",
     "eval:safety": "uv run ml/evals/run.py",
     "check:all": "uv lock --check && pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",
+    "@eslint/js": "10.0.1",
+    "@jest/globals": "30.5.2",
+    "eslint": "10.12.0",
+    "jest": "30.5.2",
+    "prettier": "3.9.9",
+    "ts-jest": "29.4.14",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1"
   }
 }

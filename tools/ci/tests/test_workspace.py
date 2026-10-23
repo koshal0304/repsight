@@ -27,6 +27,19 @@ def test_nfr_038_toolchain_pins_are_exact() -> None:
     assert (ROOT / ".nvmrc").read_text().startswith("22.13.")
 
 
+def test_nfr_038_npm_dependencies_are_pinned_exactly() -> None:
+    # Same globs as pnpm-workspace.yaml, so node_modules is never scanned.
+    workspace = [*ROOT.glob("apps/*/package.json"), *ROOT.glob("packages/*/package.json")]
+    loose = [
+        f"{path.relative_to(ROOT)}: {name}@{spec}"
+        for path in [ROOT / "package.json", *workspace]
+        for field in ("dependencies", "devDependencies", "optionalDependencies")
+        for name, spec in json.loads(path.read_text()).get(field, {}).items()
+        if spec != "workspace:*" and not re.fullmatch(r"\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?", spec)
+    ]
+    assert loose == []
+
+
 def test_env_example_defines_every_playbook_variable() -> None:
     name_cells = [row.split("|")[1] for row in section("4.5").splitlines() if row.startswith("| `")]
     expected = {name for cell in name_cells for name in re.findall(r"`([A-Z][A-Z0-9_]+)`", cell)}

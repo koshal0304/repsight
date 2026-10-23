@@ -1,0 +1,18 @@
+{
+  "name": "@repsight/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "JSON Schemas shared by the app and the backend (05 §3.2)",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . && prettier --check .",
+    "typecheck": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@repsight/config": "workspace:*"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}

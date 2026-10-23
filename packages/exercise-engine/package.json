@@ -1,0 +1,18 @@
+{
+  "name": "@repsight/exercise-engine",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Rep, rule and cue engine in pure TypeScript, run on the phone and in CI (05 §3.2)",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . && prettier --check .",
+    "typecheck": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@repsight/config": "workspace:*"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}
