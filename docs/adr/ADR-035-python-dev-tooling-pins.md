@@ -2,10 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-10-23 |
 | Drafted by | Claude Code (E0-T03) |
 | Decides | Tech lead (HITL-09) |
+| Accepted | 2026-10-23 by Koshal Kumar in the E0-T03 session (HITL-09), as written, including PSF-2.0 for runtime dependencies and MPL-2.0 for dev tooling. Given before PR #4 merged |
 | Scope | Python dev tools at the uv workspace root, the build backend for `services/api` and `services/worker`, and two licences outside the GR-11 list. The runtime pins (FastAPI, Uvicorn, Pydantic, pydantic-settings, Celery) come from canon §10.2 and need no ADR |
 
 ## Context
