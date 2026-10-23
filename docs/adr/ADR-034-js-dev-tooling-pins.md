@@ -2,10 +2,11 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-10-23 |
 | Drafted by | Claude Code (E0-T02) |
 | Decides | Tech lead (HITL-09) |
+| Accepted | 2026-10-23 by Koshal Kumar in the E0-T02 session (HITL-09), as written, including BlueOak-1.0.0 for dev tooling. Given after PR #2 merged, so it is recorded in this follow-up |
 | Scope | Dev-only npm tools at the workspace root, the policy for dependency build scripts, and one dev-tree licence outside the GR-11 list. Mobile app libraries stay with ADR-001 and ADR-006 |
 
 ## Context
