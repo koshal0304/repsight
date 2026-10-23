@@ -19,17 +19,17 @@
 | Field | Value |
 |---|---|
 | Task | E0-T03 — Python skeleton |
-| Branch / PR | `e0/e0-t03-python-skeleton`; PR not opened yet |
-| Status | IN PROGRESS |
-| Last commit | `9b220da` Merge pull request #3 (E0-T02) |
-| Next step | Run `pnpm check:all` on a clean clone of the branch, push, open the PR; then HITL-09 for ADR-035 |
+| Branch / PR | `e0/e0-t03-python-skeleton`; [#4](https://github.com/koshal0304/repsight/pull/4) (open) |
+| Status | IN REVIEW (waiting for HITL-09) |
+| Last commit | `488aaa4` refactor(E0-T03): keep the worker at services/worker/worker.py |
+| Next step | Tech lead reviews #4 and answers HITL-09 for ADR-035; after the merge, start E0-T04 in a new session (`docker-compose.yml`, and settle redis-py 8.1.0 vs kombu) |
 | Resume prompt | "Continue E0: next open task in docs/PROGRESS.md." |
 
 ## Epic status
 
 | Epic | Name | Weeks | Gate | Status | Tasks done | Current / next task | Blocker or HITL | PRs |
 |---|---|---|---|---|---|---|---|---|
-| E0 | Repo bootstrap and CI | W1 | M1 | IN PROGRESS | 2/9 | E0-T03 (in progress) | HITL-09 (ADR-035) | #1, #2, #3 |
+| E0 | Repo bootstrap and CI | W1 | M1 | IN PROGRESS | 2/9 | E0-T03 (in review) | HITL-09 (ADR-035) | #1, #2, #3, #4 |
 | E1 | Backend foundation | W1–W10 | M2 | NOT STARTED | 0/11 | E1-T01 | — | — |
 | E2 | Mobile foundation | W2–W10 | M2 | NOT STARTED | 0/10 | E2-T01 | — | — |
 | E3 | PoseEngine and camera pipeline | W1–W12 | M1, M2 | NOT STARTED | 0/12 | E3-T01 | — | — |
@@ -52,7 +52,7 @@
 |---|---|---|---|---|---|
 | E0-T01 | DONE | [#1](https://github.com/koshal0304/repsight/pull/1) (merged, `885a510`) | NFR-038 (partial: toolchain pins exact, lockfiles committed; the full pin checker comes with the E0 linters) | `tools/ci/tests/test_workspace.py`: `test_nfr_038_toolchain_pins_are_exact`, `test_env_example_defines_every_playbook_variable`, `test_root_scripts_cover_playbook_bootstrap_commands`, `test_gr_12_env_file_is_git_ignored` | ADR-033 Accepted 2026-10-23 (HITL-09). Script bodies for code that does not exist yet (`db:seed`, `worker:dev`, `admin:dev`, `gen:api`, `harness`) follow the 05 §3.1 layout; the task that builds each one confirms or adjusts it |
 | E0-T02 | DONE | [#2](https://github.com/koshal0304/repsight/pull/2) (merged, `27d03f3`); acceptance recorded in #3 | NFR-038 (partial: every npm manifest pinned exactly) | `packages/exercise-engine/test/smoke.test.ts`, `packages/contracts/test/smoke.test.ts`, `tools/ci/tests/test_workspace.py`: `test_nfr_038_npm_dependencies_are_pinned_exactly` | ADR-034 Accepted 2026-10-23 (HITL-09). Prettier runs with its defaults plus `.editorconfig`. The React Hooks and React Native accessibility rules (05 §5.1) come with `apps/mobile` in E2-T01; ADR-034 lists the ESLint 10 support gaps E2 must settle |
-| E0-T03 | IN PROGRESS | — | NFR-038 (partial: every Python manifest pinned exactly) | `services/api/tests/test_health.py`: `test_health_checks_return_200` (`/healthz`, `/readyz`); `services/worker/tests/test_worker.py`: `test_worker_takes_broker_url_from_settings`; `tools/ci/tests/test_workspace.py`: `test_nfr_038_python_dependencies_are_pinned_exactly` | ADR-035 drafted (Proposed, HITL-09). Root `lint`, `typecheck` and `test` now run ruff, mypy and every pytest suite. `services/worker` is a script directory that `pnpm worker:dev` and pytest put on `PYTHONPATH`; `services/api` is an installed package. Settings hold only `celery_broker_url`; each later task adds the fields it reads. `/readyz` checks nothing until E1 adds the DB and Valkey clients |
+| E0-T03 | IN REVIEW | [#4](https://github.com/koshal0304/repsight/pull/4) (open) | NFR-038 (partial: every Python manifest pinned exactly) | `services/api/tests/test_health.py`: `test_health_checks_return_200` (`/healthz`, `/readyz`); `services/worker/tests/test_worker.py`: `test_worker_takes_broker_url_from_settings`; `tools/ci/tests/test_workspace.py`: `test_nfr_038_python_dependencies_are_pinned_exactly` | ADR-035 drafted (Proposed, HITL-09). Root `lint`, `typecheck` and `test` now run ruff, mypy and every pytest suite. `services/worker` is a script directory that `pnpm worker:dev` and pytest put on `PYTHONPATH`; `services/api` is an installed package. Settings hold only `celery_broker_url`; each later task adds the fields it reads. `/readyz` checks nothing until E1 adds the DB and Valkey clients |
 | E0-T04 | NOT STARTED | — | — | — | Add the Docker image tags to ADR-033. **Settle the broker client:** canon pins redis-py 8.1.0, but kombu 5.6.2 declares `redis<6.5` for its `redis` extra. Test 8.1.0 against the local Valkey, then log the outcome in `docs/DECISIONS.md` (and write an ADR if a pin changes). Until then `pnpm worker:dev` stops at kombu's Redis transport (ADR-035) |
 | E0-T05 | NOT STARTED | — | NFR-032, NFR-024, BR-23 | — | Linters go into the existing `tools/ci` project |
 | E0-T06 | NOT STARTED | — | — | — | Runs on `koshal0304/repsight` (private, personal account; HITL-12 answered 2026-10-23). SAST for TypeScript means adding ESLint security rules to `packages/config/eslint.config.js` (02 §10.13) |
@@ -70,7 +70,7 @@
 
 | Gate | Command or CI job | Result | Run ID / evidence | Commit | Date |
 |---|---|---|---|---|---|
-| Local checks | `pnpm install --frozen-lockfile && uv sync --frozen && pnpm check:all` on a clean clone | PASS (ESLint and Prettier on 3 packages, `tsc` on 2, 2 Jest tests, 5 pytest tests) | Local run on a fresh clone of `main` from GitHub, macOS arm64, Node 22.13.1, pnpm 12.10.1, uv 0.12.24, CPython 3.14.8; Linux not run yet (needs CI, E0-T06) | `27d03f3` (`main`) | 2026-10-23 |
+| Local checks | `pnpm install --frozen-lockfile && uv sync --frozen && pnpm check:all` on a clean clone | PASS (ESLint and Prettier on 3 packages, ruff on 8 Python files, `tsc` on 2, mypy on 5 files, 2 Jest tests, 9 pytest tests) | Local run on a fresh clone of the E0-T03 branch (PR #4), macOS arm64, Node 22.13.1, pnpm 12.10.1, uv 0.12.24, CPython 3.14.8; Linux not run yet (needs CI, E0-T06). `main` last passed at `27d03f3` | `488aaa4` (`e0/e0-t03-python-skeleton`) | 2026-10-23 |
 | CI on `main` | `ci.yml` | not run yet (E0-T06) | — | — | — |
 | Golden harness | `pnpm harness` / `harness.yml` | n/a until E4-T05 | — | — | — |
 | Safety eval | `pnpm eval:safety -- --mode mock` / `safety-eval.yml` | n/a until E7-T11 | — | — | — |
@@ -87,7 +87,7 @@
 
 | Date | Task | What was done | Gates run | Next step |
 |---|---|---|---|---|
-| 2026-10-23 | E0-T03 | `services/api` (package `app`, FastAPI 0.143.3) with `/healthz`, `/readyz` and pydantic-settings; `services/worker` Celery 5.6.3 stub that reads its broker URL from settings; ruff, mypy (strict) and pytest config in the root `pyproject.toml`; root `lint`, `typecheck` and `test` extended; Python pin test added; ADR-035 drafted | `pnpm check:all` in the working tree (ESLint and Prettier on 3 packages, ruff on 8 Python files, `tsc` on 2, mypy on 5 files, 2 Jest tests, 9 pytest tests); uvicorn answered 200 on both health routes; each deliberate violation failed | Clean-clone check, push, open the PR; HITL-09 for ADR-035 |
+| 2026-10-23 | E0-T03 | `services/api` (package `app`, FastAPI 0.143.3) with `/healthz`, `/readyz` and pydantic-settings; `services/worker` Celery 5.6.3 stub that reads its broker URL from settings; ruff, mypy (strict) and pytest config in the root `pyproject.toml`; root `lint`, `typecheck` and `test` extended; Python pin test added; ADR-035 drafted. PR #4 opened | `pnpm check:all` on a clean clone of `488aaa4` (ESLint and Prettier on 3 packages, ruff on 8 Python files, `tsc` on 2, mypy on 5 files, 2 Jest tests, 9 pytest tests); `pnpm api:dev` answered 200 on both health routes; each deliberate violation failed | Review #4 and HITL-09 for ADR-035; then E0-T04 |
 | 2026-10-23 | E0-T02 | PR #2 merged (`27d03f3`), so E0-T02 is DONE. HITL-09 answered after the merge: ADR-034 accepted as written, including BlueOak-1.0.0 for dev tooling. Recorded in PR #3 | `pnpm check:all` on a clean clone of `main` at `27d03f3` (ESLint and Prettier on 3 packages, `tsc` on 2, 2 Jest tests, 5 pytest tests) | Merge #3; then E0-T03 in a new session |
 | 2026-10-23 | E0-T02 | PR #1 merged (`885a510`), so E0-T01 is DONE. `packages/config` holds the shared `tsconfig.base.json` (05 §5.1 flags) and ESLint flat config (typescript-eslint strict type-checked, a reason required on every disable). `packages/exercise-engine` and `packages/contracts` are empty, with one Jest smoke test each. Root JS dev tools pinned exactly; ADR-034 drafted; dependency build scripts denied through `allowBuilds`; npm pin test added | `pnpm check:all` on a clean clone of `d7540df` (ESLint and Prettier on 3 packages, `tsc` on 2, 2 Jest tests, 5 pytest tests); deliberate violations each failed. PR #2 opened | Review #2 and HITL-09 for ADR-034; then E0-T03 |
 | 2026-10-23 | E0-T01 | HITL-12 answered: a human created the private repo `koshal0304/repsight` and pushed `main` and the task branch. Claude Code opened PR #1 | — | Review and merge #1; E0-T02 |
