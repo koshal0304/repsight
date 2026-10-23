@@ -5,8 +5,5 @@ description = "Repository linters and checks used by CI and pre-commit (05 §3.2
 requires-python = ">=3.14.8,<3.15"
 dependencies = []
 
-[dependency-groups]
-dev = ["pytest==9.1.1"]
-
 [tool.uv]
 package = false

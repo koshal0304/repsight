@@ -6,3 +6,31 @@ required-version = "==0.12.24"
 
 [tool.uv.workspace]
 members = ["services/*", "tools/*"]
+
+# Dev tools for every member, pinned once (ADR-035).
+[dependency-groups]
+dev = ["httpx2==2.13.1", "mypy==2.4.0", "pytest==9.1.1", "ruff==0.17.0"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["services/api", "services/worker"]
+# Ruff 0.17 also formats code blocks in Markdown; the spec docs change only by owner-approved PRs.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+# 05 §5.2: pyflakes, pycodestyle, isort, bugbear, bandit, pyupgrade.
+select = ["F", "E", "W", "I", "B", "S", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may assert and call git from PATH.
+"**/tests/**" = ["S101", "S607"]
+
+[tool.mypy]
+strict = true
+files = ["services/api/app", "tools"]
+
+[tool.pytest.ini_options]
+testpaths = ["tools/ci", "services"]
+pythonpath = ["services/worker"]
+addopts = ["--import-mode=importlib"]

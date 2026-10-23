@@ -40,6 +40,26 @@ def test_nfr_038_npm_dependencies_are_pinned_exactly() -> None:
     assert loose == []
 
 
+def test_nfr_038_python_dependencies_are_pinned_exactly() -> None:
+    # Same globs as the uv workspace members; workspace sources carry no version.
+    members = [*ROOT.glob("services/*/pyproject.toml"), *ROOT.glob("tools/*/pyproject.toml")]
+    loose = []
+    for path in [ROOT / "pyproject.toml", *members]:
+        data = tomllib.loads(path.read_text())
+        workspace = set(data.get("tool", {}).get("uv", {}).get("sources", {}))
+        specs = [
+            *data.get("project", {}).get("dependencies", []),
+            *(spec for group in data.get("dependency-groups", {}).values() for spec in group),
+            *data.get("build-system", {}).get("requires", []),
+        ]
+        loose += [
+            f"{path.relative_to(ROOT)}: {spec}"
+            for spec in specs
+            if spec not in workspace and not re.fullmatch(r"[A-Za-z0-9_.-]+==\d+(\.\d+)*", spec)
+        ]
+    assert loose == []
+
+
 def test_env_example_defines_every_playbook_variable() -> None:
     name_cells = [row.split("|")[1] for row in section("4.5").splitlines() if row.startswith("| `")]
     expected = {name for cell in name_cells for name in re.findall(r"`([A-Z][A-Z0-9_]+)`", cell)}
